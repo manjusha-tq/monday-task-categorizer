@@ -57,7 +57,7 @@ app.post("/webhook", async (req, res) => {
       }
     `;
 
-    await fetch(MONDAY_API_URL, {
+    const response = await fetch(MONDAY_API_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -66,13 +66,17 @@ app.post("/webhook", async (req, res) => {
       body: JSON.stringify({ query }),
     });
 
-    // after await fetch(...)
-    const result = await response.json();
-    console.log("Webhook event:", JSON.stringify(event));
-    console.log("Monday response:", JSON.stringify(result));
+    // // after await fetch(...)
+    // const result = await response.json();
+    // console.log("Webhook event:", JSON.stringify(event));
+    // console.log("Monday response:", JSON.stringify(result));
+
+    const data = await response.json();
+    console.log("✅ Monday API Response:", data);
 
 
-    res.send({ success: true, taskType });
+    // res.send({ success: true, taskType });
+    res.status(200).send({ success: true, taskType });
   } catch (error) {
     console.error("Error handling webhook:", error);
     res.status(500).send({ error: "Server error" });
